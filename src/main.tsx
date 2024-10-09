@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { PersistGate } from "redux-persist/integration/react";
 
-import App from "./components/App/App.jsx";
+import App from "./components/App/App";
 import "modern-normalize";
 import "./index.css";
 

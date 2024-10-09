@@ -2,23 +2,34 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+import { IContact } from "../../types";
+import { RootState } from "../store";
+
 axios.defaults.baseURL = "https://connections-api.goit.global";
 
-const notifyAddContact = (name) =>
+const notifyAddContact = (name: string) =>
   toast.success(`Contact ${name} successfully added`);
-const notifyDeleteContact = (name) =>
+const notifyDeleteContact = (name: string) =>
   toast.success(`Contact ${name} successfully deleted`);
-const notifyEditContact = (name) =>
+const notifyEditContact = (name: string) =>
   toast.success(`Contact ${name} successfully edited`);
 
-export const fetchContacts = createAsyncThunk(
+export const fetchContacts = createAsyncThunk<
+  IContact[],
+  void,
+  { state: RootState }
+>(
   "contacts/fetchAll",
   async (_, thunkAPI) => {
     try {
       const respons = await axios.get("/contacts");
       return respons.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   },
   {
@@ -29,7 +40,7 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 
-export const addContact = createAsyncThunk(
+export const addContact = createAsyncThunk<IContact, Omit<IContact, "id">>(
   "contacts/addContact",
   async (contact, thunkAPI) => {
     try {
@@ -37,12 +48,16 @@ export const addContact = createAsyncThunk(
       notifyAddContact(respons.data.name);
       return respons.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
 
-export const deleteContact = createAsyncThunk(
+export const deleteContact = createAsyncThunk<Omit<IContact, "id">, string>(
   "contacts/deleteContact",
   async (contactId, thunkAPI) => {
     try {
@@ -50,12 +65,16 @@ export const deleteContact = createAsyncThunk(
       notifyDeleteContact(respons.data.name);
       return respons.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
 
-export const editContact = createAsyncThunk(
+export const editContact = createAsyncThunk<IContact, IContact>(
   "contacts/editContact",
   async ({ id, name, number }, thunkAPI) => {
     try {
@@ -63,7 +82,8 @@ export const editContact = createAsyncThunk(
       notifyEditContact(name);
       return resp.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue(error.message);
     }
   }
 );

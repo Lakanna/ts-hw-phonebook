@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   fetchContacts,
   addContact,
@@ -7,22 +7,37 @@ import {
 } from "./operations";
 import { logOut } from "../auth/operations";
 
-const handlePending = (state) => {
-  state.loading = true;
+import { IContact } from "../../types";
+import { RootState } from "../store";
+
+interface IState {
+  items: IContact[] | [];
+  loading: boolean;
+  error: null | string;
+}
+
+const initialState: IState = {
+  items: [],
+  loading: false,
+  error: null,
 };
 
-const handleRejected = (state, action) => {
-  state.loading = false;
-  state.error = action.payload;
+const handlePending = (state: RootState) => {
+  state.contacts.loading = true;
+};
+
+const handleRejected = (
+  state: RootState,
+  action: PayloadAction<Error["message"]>
+) => {
+  state.contacts.loading = false;
+  state.contacts.error = action.payload;
 };
 
 const contactsSlice = createSlice({
   name: "contacts",
-  initialState: {
-    items: [],
-    loading: false,
-    error: null,
-  },
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, handlePending)

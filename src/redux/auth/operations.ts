@@ -2,12 +2,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+import { User } from "../../types";
+import { RegisterPayload } from "./slice";
+import { RootState } from "../store";
+
 axios.defaults.baseURL = "https://connections-api.goit.global/";
 
 const notify = () => toast.error("Invalid email or password. Try again");
 
 // ** add JWT
-const setAuthHeader = (token) => {
+const setAuthHeader = (token: string) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
@@ -20,15 +24,21 @@ const clearAuthHeader = () => {
  * POST @ /users/signup
  * body: { name, email, password }
  */
-export const register = createAsyncThunk(
+export const register = createAsyncThunk<RegisterPayload, User>(
   "auth/register",
-  async (credentials, thunkAPI) => {
+  async (credentials: User, thunkAPI) => {
     try {
       const res = await axios.post("/users/signup", credentials);
       setAuthHeader(res.data.token);
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        // Якщо error є об'єктом Error, доступ до error.message буде безпечним
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        // Якщо це інший тип помилки, повернемо стандартне повідомлення
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   }
 );
@@ -37,16 +47,20 @@ export const register = createAsyncThunk(
  * POST @ /users/login
  * body: { email, password }
  */
-export const logIn = createAsyncThunk(
+export const logIn = createAsyncThunk<RegisterPayload, User>(
   "auth/login",
-  async (credentials, thunkAPI) => {
+  async (credentials: Omit<User, "name">, thunkAPI) => {
     try {
       const res = await axios.post("/users/login", credentials);
       setAuthHeader(res.data.token);
       return res.data;
     } catch (error) {
       notify();
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        return thunkAPI.fulfillWithValue("Something went wrong");
+      }
     }
   }
 );
@@ -60,21 +74,33 @@ export const logOut = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
     await axios.post("/users/logout");
     clearAuthHeader();
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+    if (error instanceof Error) {
+      return thunkAPI.rejectWithValue(error.message);
+    } else {
+      return thunkAPI.rejectWithValue("Something went wrong");
+    }
   }
 });
 
-export const refreshUser = createAsyncThunk(
+export const refreshUser = createAsyncThunk<User, void, { state: RootState }>(
   "auth/refresh",
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
 
     try {
-      setAuthHeader(state.auth.token);
+      if (state.auth.token) {
+        setAuthHeader(state.auth.token);
+      } else {
+        return;
+      }
       const resp = await axios.get("/users/current");
       return resp.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        return thunkAPI.rejectWithValue("Something went wrong");
+      }
     }
   },
   {
