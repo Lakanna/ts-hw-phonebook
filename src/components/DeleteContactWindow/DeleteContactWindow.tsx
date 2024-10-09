@@ -1,11 +1,21 @@
 import { useDispatch } from "react-redux";
 import css from "./DeleteContactWindow.module.css";
 import { deleteContact } from "../../redux/contacts/operations";
+import { IContact } from "../../types";
+import { AppDispatch } from "../../redux/store";
 
-export default function DeleteContactWindow({ onCloseModal, contact }) {
-  const dispatch = useDispatch();
+interface DeleteContactWindowProps {
+  onCloseModal: () => void;
+  contact: IContact;
+}
 
-  const handleDelete = (contact) => {
+const DeleteContactWindow: React.FC<DeleteContactWindowProps> = ({
+  onCloseModal,
+  contact,
+}) => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleDelete = (contact: IContact) => {
     dispatch(deleteContact(contact.id));
     onCloseModal();
   };
@@ -37,4 +47,6 @@ export default function DeleteContactWindow({ onCloseModal, contact }) {
       </div>
     </>
   );
-}
+};
+
+export default DeleteContactWindow;

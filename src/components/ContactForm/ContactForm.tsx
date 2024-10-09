@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { ErrorMessage } from "formik";
 
 import { useDispatch } from "react-redux";
@@ -7,9 +7,24 @@ import { addContact, editContact } from "../../redux/contacts/operations";
 
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
+import { IContact } from "../../types";
+import { AppDispatch } from "../../redux/store";
 
-export default function ContactForm({ currentContact, onCloseModal }) {
-  const dispatch = useDispatch();
+interface ContactFormProps {
+  currentContact?: IContact | null;
+  onCloseModal?: () => void;
+}
+
+interface IFormValues {
+  name: string;
+  number: string;
+}
+
+const ContactForm: React.FC<ContactFormProps> = ({
+  currentContact,
+  onCloseModal,
+}) => {
+  const dispatch: AppDispatch = useDispatch();
   const fieldNameId = useId();
   const fieldNumberId = useId();
 
@@ -23,10 +38,13 @@ export default function ContactForm({ currentContact, onCloseModal }) {
       .required("Required"),
   });
 
-  function handleSubmit(values, actions) {
+  function handleSubmit(
+    values: IFormValues,
+    actions: FormikHelpers<IFormValues>
+  ) {
     const newContact = { ...values };
 
-    if (currentContact) {
+    if (currentContact && onCloseModal) {
       dispatch(editContact({ ...values, id: currentContact.id }));
       onCloseModal();
     } else {
@@ -68,4 +86,6 @@ export default function ContactForm({ currentContact, onCloseModal }) {
       </Form>
     </Formik>
   );
-}
+};
+
+export default ContactForm;

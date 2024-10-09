@@ -2,16 +2,25 @@ import Modal from "react-modal";
 import css from "./ModalWindow.module.css";
 import DeleteContactWindow from "../DeleteContactWindow/DeleteContactWindow";
 import ContactForm from "../ContactForm/ContactForm";
+import { IContact } from "../../types";
 
 Modal.setAppElement("#root");
 
-export default function ModalWindow({
+interface ModalWindowProps {
+  onCloseModal: () => void;
+  modalIsOpen: boolean;
+  contact: IContact;
+  editContactModal: boolean;
+  deleteContactModal: boolean;
+}
+
+const ModalWindow: React.FC<ModalWindowProps> = ({
   onCloseModal,
   modalIsOpen,
   contact,
   editContactModal,
   deleteContactModal,
-}) {
+}) => {
   return (
     <>
       <Modal
@@ -29,4 +38,6 @@ export default function ModalWindow({
       </Modal>
     </>
   );
-}
+};
+
+export default ModalWindow;

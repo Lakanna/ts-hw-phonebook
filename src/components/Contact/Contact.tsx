@@ -4,13 +4,19 @@ import { IoPerson } from "react-icons/io5";
 import { useState } from "react";
 import ModalWindow from "../ModalWindow/ModalWindow";
 
-export default function Contact({ contact }) {
+import { IContact } from "../../types";
+
+interface ContactProps {
+  contact: IContact;
+}
+
+const Contact: React.FC<ContactProps> = ({ contact }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [deleteContactModal, setdeleteContactModal] = useState(false);
   const [editContactModal, seteditContactModal] = useState(false);
   const { name, number } = contact;
 
-  function openModal(param) {
+  function openModal(param: string): void {
     if (param === "deleteBtn") {
       setdeleteContactModal(true);
     } else {
@@ -46,7 +52,11 @@ export default function Contact({ contact }) {
       >
         Delete
       </button>
-      <button className={css.btnEdit} type="button" onClick={() => openModal()}>
+      <button
+        className={css.btnEdit}
+        type="button"
+        onClick={() => openModal("editBtn")}
+      >
         Edit contact
       </button>
 
@@ -61,4 +71,6 @@ export default function Contact({ contact }) {
       )}
     </div>
   );
-}
+};
+
+export default Contact;

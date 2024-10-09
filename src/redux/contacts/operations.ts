@@ -17,7 +17,7 @@ const notifyEditContact = (name: string) =>
 export const fetchContacts = createAsyncThunk<
   IContact[],
   void,
-  { state: RootState }
+  { state: RootState; rejectValue: string }
 >(
   "contacts/fetchAll",
   async (_, thunkAPI) => {
@@ -40,50 +40,52 @@ export const fetchContacts = createAsyncThunk<
   }
 );
 
-export const addContact = createAsyncThunk<IContact, Omit<IContact, "id">>(
-  "contacts/addContact",
-  async (contact, thunkAPI) => {
-    try {
-      const respons = await axios.post("/contacts", { ...contact });
-      notifyAddContact(respons.data.name);
-      return respons.data;
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error.message);
-      } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
-      }
+export const addContact = createAsyncThunk<
+  IContact,
+  Omit<IContact, "id">,
+  { rejectValue: string }
+>("contacts/addContact", async (contact, thunkAPI) => {
+  try {
+    const respons = await axios.post("/contacts", { ...contact });
+    notifyAddContact(respons.data.name);
+    return respons.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return thunkAPI.rejectWithValue(error.message);
+    } else {
+      return thunkAPI.rejectWithValue("Something went wrong");
     }
   }
-);
+});
 
-export const deleteContact = createAsyncThunk<Omit<IContact, "id">, string>(
-  "contacts/deleteContact",
-  async (contactId, thunkAPI) => {
-    try {
-      const respons = await axios.delete(`/contacts/${contactId}`);
-      notifyDeleteContact(respons.data.name);
-      return respons.data;
-    } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error.message);
-      } else {
-        return thunkAPI.rejectWithValue("Something went wrong");
-      }
+export const deleteContact = createAsyncThunk<
+  IContact,
+  string,
+  { rejectValue: string }
+>("contacts/deleteContact", async (contactId, thunkAPI) => {
+  try {
+    const respons = await axios.delete(`/contacts/${contactId}`);
+    notifyDeleteContact(respons.data.name);
+    return respons.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return thunkAPI.rejectWithValue(error.message);
+    } else {
+      return thunkAPI.rejectWithValue("Something went wrong");
     }
   }
-);
+});
 
-export const editContact = createAsyncThunk<IContact, IContact>(
-  "contacts/editContact",
-  async ({ id, name, number }, thunkAPI) => {
-    try {
-      const resp = await axios.patch(`/contacts/${id}`, { name, number });
-      notifyEditContact(name);
-      return resp.data;
-    } catch (error) {
-      if (error instanceof Error)
-        return thunkAPI.rejectWithValue(error.message);
-    }
+export const editContact = createAsyncThunk<
+  IContact,
+  IContact,
+  { rejectValue: string }
+>("contacts/editContact", async ({ id, name, number }, thunkAPI) => {
+  try {
+    const resp = await axios.patch(`/contacts/${id}`, { name, number });
+    notifyEditContact(name);
+    return resp.data;
+  } catch (error) {
+    if (error instanceof Error) return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
