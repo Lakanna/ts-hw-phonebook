@@ -41,7 +41,6 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
         <div className={css.contactData}>
           <MdPhone style={{ width: 20, height: 20 }} />
           <a href={"tel: $ {number}"}>{number}</a>
-          {/* <p>{number}</p> */}
         </div>
       </div>
 

@@ -1,3 +1,5 @@
-export const selectNameFilter = (state) => state.filters.name;
+import { RootState } from "../store";
 
-export const selectNumberFilter = (state) => state.filters.number;
+export const selectNameFilter = (state: RootState) => state.filters.name;
+
+export const selectNumberFilter = (state: RootState) => state.filters.number;

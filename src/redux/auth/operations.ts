@@ -47,9 +47,9 @@ export const register = createAsyncThunk<RegisterPayload, User>(
  * POST @ /users/login
  * body: { email, password }
  */
-export const logIn = createAsyncThunk<RegisterPayload, User>(
+export const logIn = createAsyncThunk<RegisterPayload, Omit<User, "name">>(
   "auth/login",
-  async (credentials: Omit<User, "name">, thunkAPI) => {
+  async (credentials, thunkAPI) => {
     try {
       const res = await axios.post("/users/login", credentials);
       setAuthHeader(res.data.token);

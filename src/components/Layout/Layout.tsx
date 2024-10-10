@@ -1,7 +1,11 @@
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 import { AppBar } from "../AppBar/AppBar";
 
-export const Layout = ({ children }) => {
+interface ILayoutProps {
+  children: ReactNode;
+}
+
+export const Layout: React.FC<ILayoutProps> = ({ children }) => {
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 16px" }}>
       <AppBar />

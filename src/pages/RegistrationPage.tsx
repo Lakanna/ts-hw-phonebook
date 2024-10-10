@@ -1,4 +1,4 @@
-import { DocumentTitle } from "../components/DocumentTitle";
+import DocumentTitle from "../components/DocumentTitle";
 import { RegistrationForm } from "../components/RegistrationForm/RegistrationForm";
 
 const styles = {

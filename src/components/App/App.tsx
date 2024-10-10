@@ -7,6 +7,7 @@ import { refreshUser } from "../../redux/auth/operations";
 import { RestrictedRoute } from "../RestrictedRoute/RestrictedRoute";
 import { PrivateRoute } from "../PrivateRoute/PrivateRoute";
 import { Toaster } from "react-hot-toast";
+import { AppDispatch } from "../../redux/store";
 
 const HomePage = lazy(() => import("../../pages/HomePage"));
 const LoginPage = lazy(() => import("../../pages/LoginPage"));
@@ -14,7 +15,7 @@ const RegistrationPage = lazy(() => import("../../pages/RegistrationPage"));
 const ContactsPage = lazy(() => import("../../pages/ContactsPage"));
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const isRefreshing = useSelector(selectIsRefreching);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ function App() {
         <Route
           path="/contacts"
           element={
-            <PrivateRoute component={<ContactsPage />} redirectTo={"/login"} />
+            <PrivateRoute component={ContactsPage} redirectTo={"/login"} />
           }
         />
         <Route path="*" element={<HomePage />} />

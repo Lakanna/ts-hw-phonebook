@@ -1,11 +1,10 @@
-import { DocumentTitle } from "../components/DocumentTitle";
+import DocumentTitle from "../components/DocumentTitle";
 
 const styles = {
   container: {
     minHeight: "calc(100vh - 50px)",
     display: "flex",
     alignItems: "center",
-    // justifyContent: "center",
     flexDirection: "column",
   },
   title: {

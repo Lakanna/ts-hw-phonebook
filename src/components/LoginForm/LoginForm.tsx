@@ -1,18 +1,27 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useId } from "react";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../redux/auth/operations";
 import css from "./LoginForm.module.css";
 import { Link } from "react-router-dom";
+import { AppDispatch } from "../../redux/store";
+
+interface IFormValues {
+  email: string;
+  password: string;
+}
 
 export const LoginForm = () => {
   const initialValues = { email: "", password: "" };
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const emailFieldId = useId();
   const passwordFieldId = useId();
 
-  const handleLogin = (values, actions) => {
+  const handleLogin = (
+    values: IFormValues,
+    actions: FormikHelpers<IFormValues>
+  ) => {
     dispatch(logIn(values));
     actions.resetForm();
   };
