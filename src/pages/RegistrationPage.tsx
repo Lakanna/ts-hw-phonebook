@@ -1,7 +1,8 @@
+import { CSSProperties } from "react";
 import DocumentTitle from "../components/DocumentTitle";
-import { RegistrationForm } from "../components/RegistrationForm/RegistrationForm";
+import RegistrationForm from "../components/RegistrationForm/RegistrationForm";
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   container: {
     minHeight: "calc(100vh - 50px)",
     display: "flex",
@@ -10,7 +11,7 @@ const styles = {
   },
 };
 
-export default function RegistrationPage() {
+const RegistrationPage: React.FC = () => {
   return (
     <>
       <DocumentTitle>Registration</DocumentTitle>
@@ -20,4 +21,6 @@ export default function RegistrationPage() {
       </div>
     </>
   );
-}
+};
+
+export default RegistrationPage;

@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
-import css from "./DeleteContactWindow.module.css";
 import { deleteContact } from "../../redux/contacts/operations";
 import { IContact } from "../../types";
 import { AppDispatch } from "../../redux/store";
+import css from "./DeleteContactWindow.module.css";
 
 interface DeleteContactWindowProps {
   onCloseModal: () => void;

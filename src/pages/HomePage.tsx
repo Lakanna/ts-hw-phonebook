@@ -1,6 +1,7 @@
+import { CSSProperties } from "react";
 import DocumentTitle from "../components/DocumentTitle";
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   container: {
     minHeight: "calc(100vh - 50px)",
     display: "flex",
@@ -17,7 +18,7 @@ const styles = {
   },
 };
 
-export default function HomePage() {
+const HomePage: React.FC = () => {
   return (
     <>
       <DocumentTitle>Home</DocumentTitle>
@@ -35,4 +36,6 @@ export default function HomePage() {
       </div>
     </>
   );
-}
+};
+
+export default HomePage;

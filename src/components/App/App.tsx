@@ -14,7 +14,7 @@ const LoginPage = lazy(() => import("../../pages/LoginPage"));
 const RegistrationPage = lazy(() => import("../../pages/RegistrationPage"));
 const ContactsPage = lazy(() => import("../../pages/ContactsPage"));
 
-function App() {
+const App: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const isRefreshing = useSelector(selectIsRefreching);
 
@@ -32,7 +32,7 @@ function App() {
           path="/register"
           element={
             <RestrictedRoute
-              component={<RegistrationPage />}
+              component={RegistrationPage}
               redirectTo={"/contacts"}
             />
           }
@@ -40,10 +40,7 @@ function App() {
         <Route
           path="/login"
           element={
-            <RestrictedRoute
-              component={<LoginPage />}
-              redirectTo={"/contacts"}
-            />
+            <RestrictedRoute component={LoginPage} redirectTo={"/contacts"} />
           }
         />
         <Route
@@ -57,6 +54,6 @@ function App() {
       <Toaster />
     </Layout>
   );
-}
+};
 
 export default App;

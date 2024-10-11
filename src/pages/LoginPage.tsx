@@ -1,7 +1,8 @@
+import { CSSProperties } from "react";
 import DocumentTitle from "../components/DocumentTitle";
 import { LoginForm } from "../components/LoginForm/LoginForm";
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   container: {
     minHeight: "calc(100vh - 50px)",
     display: "flex",
@@ -10,7 +11,7 @@ const styles = {
   },
 };
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
   return (
     <>
       <DocumentTitle>Login</DocumentTitle>
@@ -20,4 +21,6 @@ export default function LoginPage() {
       </div>
     </>
   );
-}
+};
+
+export default LoginPage;
